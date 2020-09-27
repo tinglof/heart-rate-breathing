@@ -3,9 +3,9 @@ import styles from './hrv-breathing.module.scss';
 import StartScreen from './components/start-screen/start-screen';
 import ActivityScreen from './components/activity-screen/activity-screen';
 
-const IN_BREATH_VALUES = [4.5, 5, 5.5, 6, 6.5, 7, 7.5];
-const OUT_BREATH_VALUES = [4.5, 5, 5.5, 6, 6.5, 7, 7.5];
-const SESSION_LENGTH_VALUES = ['off', 0.1, 10, 15, 20, 25, 30, 35, 40, 45];
+const IN_BREATH_VALUES = [4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 9, 10];
+const OUT_BREATH_VALUES = [5, 5.5, 6, 6.5, 7, 7.5, 8, 9, 10, 11, 12, 13, 14];
+const SESSION_LENGTH_VALUES = ['off', 10, 15, 20, 25, 30, 35, 40, 45];
 
 export default class HrvBreathing extends Component {
 
