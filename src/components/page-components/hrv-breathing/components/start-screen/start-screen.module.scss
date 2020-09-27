@@ -1,0 +1,63 @@
+@import 'styles/standard-theme.scss';
+@import 'styles/break-points.scss';
+
+.wrapper {
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.headline {
+    color: map-get($standard, 'text');
+    margin: 0;
+    text-align: center;
+    opacity: 0.3;
+    position: relative;
+    z-index: 1;
+}
+
+.headlinewrapper {
+    position: relative;
+}
+
+.icon {
+    position: absolute;
+    top: 0rem;
+    left: 1rem;
+    z-index: 2;
+    background: map-get($standard, 'accent');
+    width: 6rem;
+    height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+}
+
+.button-wrapper  {
+    margin-top: 2.5rem;
+}
+
+.start {
+    border: 3px solid map-get($standard, 'element_bkg');
+    //border: 0;
+    color: map-get($standard, 'text');
+    border-radius: 0.75rem;
+    padding: 1.75rem 3.5rem;
+    font-size: 1.2rem;
+    //background: map-get($standard, 'element_bkg');
+    background: transparent;
+    letter-spacing: 1px;
+    font-weight: 600;
+    font-family: 'Source Sans Pro';
+    display: flex;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.button-text {
+    margin-right: 0.75rem;
+}

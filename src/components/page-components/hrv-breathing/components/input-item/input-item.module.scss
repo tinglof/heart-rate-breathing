@@ -1,0 +1,19 @@
+@import 'styles/standard-theme.scss';
+@import 'styles/break-points.scss';
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: map-get($standard , 'text');
+    will-change: background;
+    transition: background 100ms ease-out;
+    font-family: 'Source Sans Pro';
+    font-size: 1.35rem;
+
+    &.visible {
+        background: map-get($standard , 'accent');
+        font-weight: bold;
+    }
+  }

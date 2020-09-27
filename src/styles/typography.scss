@@ -1,0 +1,36 @@
+@import "./fonts/style.scss";
+@import "./break-points.scss";
+
+h1, .h1 {
+    font-family: 'Source Sans Pro';
+    font-weight: 700;
+}
+
+h2, .h2 {
+    font-family: 'Source Sans Pro';
+    font-weight: 700;
+}
+
+h3, .h3 {
+    font-family: 'Source Sans Pro';
+    font-weight: 700;
+}
+
+h4, .h4 {
+    font-family: 'Source Sans Pro';
+    font-weight: 700;
+}
+
+p, .p {
+    font-family: 'Source Sans Pro';
+}
+
+.hero-heading {
+    font-family: 'Permanent Marker';
+    font-weight: 400;
+    font-size: 3rem;
+
+    @media (min-width: 48em) {
+        font-size: 4rem;
+    }
+}

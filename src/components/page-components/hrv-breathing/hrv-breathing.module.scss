@@ -1,0 +1,13 @@
+@import 'styles/standard-theme.scss';
+@import 'styles/break-points.scss';
+
+.wrapper {
+    background: map-get($standard, 'bkg');
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.inner-wrapper {
+    max-width: 48rem;
+    margin: 0 auto;
+}

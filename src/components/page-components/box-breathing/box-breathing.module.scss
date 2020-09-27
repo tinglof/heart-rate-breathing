@@ -1,0 +1,72 @@
+.progress-dot {
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+    top: -1rem;
+    left: -1rem;
+    border-radius: 50%;
+    background: #9BED98;
+}
+
+.box {
+    width: 20rem;
+    height: 15rem;
+    border: 2px solid #eee;
+    margin: 5rem auto 2rem;
+    position: relative;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.instruction {
+    opacity: 0.2;
+    position: absolute;
+    transition: opacity 300ms, font-weight 200ms;
+    will-change: opacity;
+    font-weight: 400;
+
+    &.active {
+        opacity: 1;
+        font-weight: 600;
+    }
+}
+
+.inhale, .exhale {
+    left: 50%;
+    transform: translateX(-50%);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hold-post-inhale, .hold-post-exhale {
+    top: 50%;
+    transform: translateY(-50%);
+    -ms-writing-mode: tb-rl; /* for IE */
+    -webkit-writing-mode: vertical-rl; /* for Webkit */
+    writing-mode: vertical-rl;
+    -webkit-text-orientation: upright;  /* for Webkit */
+    text-orientation: upright;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hold-post-inhale {
+    right: 1rem;
+}
+
+.hold-post-exhale {
+    left: 1rem;
+}
+
+.inhale {
+    top: 1rem;
+}
+
+.exhale {
+    bottom: 1rem;
+}

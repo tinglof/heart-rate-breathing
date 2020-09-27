@@ -1,0 +1,83 @@
+@import 'styles/standard-theme.scss';
+@import 'styles/break-points.scss';
+
+.wrapper {
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.headline {
+    color: map-get($standard, 'text');
+    margin: 0;
+    text-align: center;
+    opacity: 0.3;
+    position: relative;
+    z-index: 1;
+}
+
+.state-text-wrapper {
+    margin-top: 2rem;
+    display: flex;
+}
+
+.state-text {
+    color: map-get($standard, 'text');
+    font-family: 'Source Sans Pro';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: lowercase;
+}
+
+.circle-wrapper {
+    width: 20rem;
+    margin: 1.5rem auto 0;
+    height: 20rem;
+    position: relative;
+}
+
+$circlePadding: 1.5rem;
+
+.circle {
+    position: absolute;
+    top: $circlePadding;
+    left: $circlePadding;
+    bottom: $circlePadding;
+    right: $circlePadding;
+    border-radius: 50%;
+    background: map-get($standard, 'element_bkg');
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    // border:5px solid transparent;
+    // border-bottom-color: map-get($standard, 'accent');
+}
+
+.indicator {
+    width: 2rem;
+    height: 2rem;
+    background: map-get($standard, 'accent');
+    border-radius: 50%;
+    transform: translateY(50%);
+    position: relative;
+}
+
+.countdown {
+    margin-top: 4rem;
+    color: map-get($standard, 'title');
+    font-family: 'Source Sans Pro';
+    font-size: 2rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+.button-wrapper {
+    margin-top: 7rem;
+}

@@ -1,0 +1,14 @@
+@import "~fontsource-source-sans-pro/400-normal.css";
+@import "~fontsource-source-sans-pro/700-normal.css";
+@import "~fontsource-source-sans-pro/900-normal.css";
+
+/* Permanent Marker */
+
+@font-face {
+    font-family: 'Permanent Marker';
+    font-style: normal;
+    font-weight: 400;
+    src:
+            url('./PermanentMarker-Regular.woff') format('woff'),
+            url('./PermanentMarker-Regular.woff2') format('woff2');
+}
