@@ -5,8 +5,11 @@ import { motion, useCycle, AnimatePresence } from 'framer-motion';
 import CountdownTimer from '../countdown-timer/countdown-timer';
 import Button from '../button/button';
 import {Howl, Howler} from 'howler';
-import bellOneSoundFile from 'sounds/bell_one.webm';
-import bellTwoSoundFile from 'sounds/bell_two.webm';
+import bellOneSoundWebm from 'sounds/bell_one.webm';
+import bellTwoSoundWebm from 'sounds/bell_two.webm';
+import bellOneSoundMp3 from 'sounds/bell_one.mp3';
+import bellTwoSoundMp3 from 'sounds/bell_two.mp3';
+
 
 const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
 
@@ -16,21 +19,18 @@ const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
     const outBreathInMs  = outBreath * 1000;
 
     const soundOne = new Howl({
-        src: [bellOneSoundFile],
+        src: [bellOneSoundWebm, bellOneSoundMp3],
         sprite: {
           adjustedSound: [0, inBreathInMs]
         }
       });
 
       const soundTwo = new Howl({
-        src: [bellTwoSoundFile],
+        src: [bellTwoSoundWebm, bellTwoSoundMp3],
         sprite: {
           adjustedSound: [0, outBreathInMs]
         }
       });
-      
-      // Shoot the laser!
-
 
     const [animationState, updateCycle] = useCycle(
         {
