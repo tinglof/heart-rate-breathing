@@ -9,6 +9,8 @@ import bellOneSoundWebm from 'sounds/bell_one.webm';
 import bellTwoSoundWebm from 'sounds/bell_two.webm';
 import bellOneSoundMp3 from 'sounds/bell_one.mp3';
 import bellTwoSoundMp3 from 'sounds/bell_two.mp3';
+import doneMp3 from 'sounds/done.mp3';
+import doneWebm from 'sounds/done.webm';
 
 
 const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
@@ -18,19 +20,24 @@ const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
     const inBreathInMs = inBreath * 1000;
     const outBreathInMs  = outBreath * 1000;
 
+    const doneSound = new Howl({
+        src: [doneWebm, doneMp3],
+        volume: 0.5
+    })
+
     const soundOne = new Howl({
         src: [bellOneSoundWebm, bellOneSoundMp3],
         sprite: {
           adjustedSound: [0, inBreathInMs]
         }
-      });
+    });
 
       const soundTwo = new Howl({
         src: [bellTwoSoundWebm, bellTwoSoundMp3],
         sprite: {
           adjustedSound: [0, outBreathInMs]
         }
-      });
+    });
 
     const [animationState, updateCycle] = useCycle(
         {
@@ -86,6 +93,8 @@ const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
                             updateCycle();
                             const id = animationState.soundOnComplete.play('adjustedSound');
                             animationState.soundOnComplete.fade(1, 0, inBreathInMs, id);
+                        } else {
+                            doneSound.play();
                         }
                     }}
                     className={styles.circle}
