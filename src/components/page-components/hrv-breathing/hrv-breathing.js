@@ -2,6 +2,7 @@ import React, { Component} from 'react';
 import styles from './hrv-breathing.module.scss';
 import StartScreen from './components/start-screen/start-screen';
 import ActivityScreen from './components/activity-screen/activity-screen';
+import NoSleep from 'external-packages/NoSleep.js';
 
 const IN_BREATH_VALUES = [4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 9, 10];
 const OUT_BREATH_VALUES = [5, 5.5, 6, 6.5, 7, 7.5, 8, 9, 10, 11, 12, 13, 14];
@@ -19,9 +20,30 @@ export default class HrvBreathing extends Component {
             sessionLength: SESSION_LENGTH_VALUES[0],
         }
 
+        this.nosleep = null;
+
         this.onChangeInBreath = this.onChangeInBreath.bind(this);
         this.onChangeOutBreath = this.onChangeOutBreath.bind(this);
         this.onChangeSessionLength = this.onChangeSessionLength.bind(this);
+    }
+
+    
+
+        
+    enableNoSleep() {
+        if (this.nosleep) {
+            this.nosleep.disable(); // Just to be sure if you forgot to disable.
+        }
+        
+        this.nosleep = new NoSleep();
+        this.nosleep.enable();
+        console.log("Nosleep enabled");
+    }
+
+    disableNoSleep() {
+        if(this.nosleep) {
+            this.nosleep.disable();
+        }
     }
 
     onChangeInBreath(value) {
@@ -55,20 +77,20 @@ export default class HrvBreathing extends Component {
         }
     }
 
-    renderStep = () => {
+    renderStep() {
         switch(this.state.step) {
             case 1:
                 return <StartScreen 
                         inBreathValues={IN_BREATH_VALUES}
                         outBreathValues={OUT_BREATH_VALUES}
                         sessionLengthValues={SESSION_LENGTH_VALUES}
-                        onStart={() => this.setState({step: 2})}
+                        onStart={() => {this.setState({step: 2}); this.enableNoSleep();}}
                         onChangeSessionLength={this.onChangeSessionLength}
                         onChangeInBreath={this.onChangeInBreath} 
                         onChangeOutBreath={this.onChangeOutBreath}/>
             case 2:
                 return <ActivityScreen 
-                        back={() => this.setState({step: 1})}
+                        back={() => {this.setState({step: 1}); this.disableNoSleep(); }}
                         inBreath={this.state.inBreath}
                         outBreath={this.state.outBreath}
                         sessionLength={this.state.sessionLength}/>
