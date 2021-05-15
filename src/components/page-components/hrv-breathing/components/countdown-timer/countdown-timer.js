@@ -1,26 +1,18 @@
 import React from 'react';
 import styles from './countdown-timer.module.scss';
 import PropTypes from 'prop-types';
-import Timer from 'react-compound-timer';
+import CountdownTimerSakit from '@sakit-sa/countdown-timer';
 
 
-const CountdownTimer = ({intialTimeInMin, onCountDownEnd}) => {
+const CountdownTimer = ({intialTimeInSeconds, onCountDownEnd, format}) => {
     return (
-        <Timer
-            formatValue={(value) => `${(value < 10 ? `0${value}` : value)}`}
-            initialTime={intialTimeInMin * 60 * 1000}
-            direction="backward"
-            checkpoints={[
-                {
-                    time: 0,
-                    callback: onCountDownEnd,
-                },
-            ]}
-        >
-            <div className={styles.timer}>
-                <Timer.Minutes /> <span className={styles.divider}> : </span> <Timer.Seconds /> 
-            </div>
-        </Timer>
+        <div className={styles.timer}>
+            <CountdownTimerSakit 
+                time={intialTimeInSeconds}
+                format={format ? format : "MM:SS"}
+                onComplete={() => onCountDownEnd()} 
+            />
+        </div>
     );
 };
 CountdownTimer.propTypes = {

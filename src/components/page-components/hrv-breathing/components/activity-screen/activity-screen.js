@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './activity-screen.module.scss';
-import PropTypes from 'prop-types'
 import { motion, useCycle, AnimatePresence } from 'framer-motion';
 import CountdownTimer from '../countdown-timer/countdown-timer';
 import Button from '../button/button';
@@ -13,12 +12,77 @@ import doneMp3 from 'sounds/done.mp3';
 import doneWebm from 'sounds/done.webm';
 
 
-const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
-
+const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, sessionLength, back}) => {
     const [running, setRunning] = useState(true);
 
     const inBreathInMs = inBreath * 1000;
     const outBreathInMs  = outBreath * 1000;
+
+    const buildAnimationCycle = () => {
+        const animationCycle = [];
+        animationCycle.push(
+            {
+                animation: {
+                    animate: {rotate: [0, 180]},
+                    transition: { duration: inBreath, ease: 'easeInOut'}
+                },
+                colorAnimation: {
+                    animate: {background: '#6878EA'},
+                    transition: {duration: 1, ease: 'easeIn'}
+                },
+                timer: null,
+                soundOnStart: soundTwo,
+                text: 'inhale',
+            }
+        )
+
+        if(postInhaleHold) {
+            animationCycle.push(
+                {
+                    animation: null,
+                    colorAnimation: {
+                        animate: {background: '#b7bff5'},
+                        transition: {duration: 0.35, ease: 'easeIn'}
+                    },
+                    soundOnStart: soundOne,
+                    text: 'hold',
+                    timer: postInhaleHold
+                }
+            )
+        }
+
+        animationCycle.push(
+            {
+                animation: {
+                    animate: { rotate: [180, 360]},
+                    transition: { duration: outBreath, ease: 'easeInOut'}
+                },
+                colorAnimation: {
+                    animate: {background: '#6878EA'},
+                    transition: {duration: 1, ease: 'easeIn'}
+                },
+                soundOnStart: soundOne,
+                text: 'exhale',
+            }
+        );
+
+        if(postExhaleHold) {
+            animationCycle.push(
+                {
+                    animation: null,
+                    colorAnimation: {
+                        animate: {background: '#b7bff5'},
+                        transition: {duration: 0.35, ease: 'easeIn'}
+                    },
+                    soundOnStart: soundOne,
+                    text: 'hold',
+                    timer: postExhaleHold
+                }
+            )
+        }
+
+        return animationCycle;
+    }
 
     const doneSound = new Howl({
         src: [doneWebm, doneMp3],
@@ -32,40 +96,23 @@ const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
         }
     });
 
-      const soundTwo = new Howl({
+    const soundTwo = new Howl({
         src: [bellTwoSoundWebm, bellTwoSoundMp3],
         sprite: {
           adjustedSound: [0, outBreathInMs]
         }
     });
 
-    const [animationState, updateCycle] = useCycle(
-        {
-            animation: {
-                animate: {rotate: [0, 180]},
-                transition: { duration: inBreath, ease: 'easeInOut'}
-            },
-            colorAnimation: {
-                animate: {background: '#6878EA'},
-                transition: {duration: 1.8, ease: 'easeIn'}
-            },
-            step: 1,
-            soundOnComplete: soundOne,
-            text: 'inhale',
-        },
-        {
-            animation: {
-                animate: { rotate: [180, 360]},
-                transition: { duration: outBreath, ease: 'easeInOut'}
-            },
-            colorAnimation: {
-                animate: {background: '#5264e7'},
-                transition: {duration: 1.8, ease: 'easeIn'}
-            },
-            step: 2,
-            soundOnComplete: soundTwo,
-            text: 'exhale',
-        });
+    const [animationState, updateCycle] = useCycle(...buildAnimationCycle());
+
+    React.useEffect( () => {
+        if(running) {
+            const id = animationState.soundOnStart.play('adjustedSound');
+            animationState.soundOnStart.fade(1, 0, inBreathInMs, id);
+        } else {
+            doneSound.play();
+        }
+    }, [animationState, doneSound, inBreathInMs, running])
 
     return (
         <div className={styles.wrapper}>
@@ -82,7 +129,13 @@ const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
                             transition={{duration: 1, ease: 'easeInOut'}}
                             exit={{ opacity: 0 }}
                         >
-                            {animationState.text}    
+                            {animationState.text}
+                            {
+                                animationState.timer &&
+                                <div className={styles['timer-wrapper']}>
+                                    <CountdownTimer format={'ss'} onCountDownEnd={() => updateCycle()} intialTimeInSeconds={animationState.timer} />
+                                </div>
+                            }  
                         </motion.div>
                     </div>
                 </AnimatePresence>
@@ -91,10 +144,6 @@ const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
                     onAnimationComplete={() => {
                         if(running) {
                             updateCycle();
-                            const id = animationState.soundOnComplete.play('adjustedSound');
-                            animationState.soundOnComplete.fade(1, 0, inBreathInMs, id);
-                        } else {
-                            doneSound.play();
                         }
                     }}
                     className={styles.circle}
@@ -105,7 +154,7 @@ const ActivityScreen = ({inBreath, outBreath, sessionLength, back}) => {
             {   
                 sessionLength && typeof sessionLength === "number" &&
                 <div className={styles.countdown}>
-                    <CountdownTimer onCountDownEnd={() => setRunning(false)} intialTimeInMin={sessionLength} />
+                    <CountdownTimer onCountDownEnd={() => setRunning(false)} intialTimeInSeconds={sessionLength * 60} />
                 </div>
             }
 

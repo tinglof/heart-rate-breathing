@@ -1,5 +1,4 @@
 import React from 'react';
-import BoxBreathing from './components/page-components/box-breathing/box-breathing'
 import HrvBreathing from './components/page-components/hrv-breathing/hrv-breathing';
 
 

@@ -1,31 +1,40 @@
 import React from 'react';
 import styles from './start-screen.module.scss';
-//import PropTypes from 'prop-types'
-//import UseAnimations from 'react-useanimations';
-//import activity from 'react-useanimations/lib/activity';
 import SwipeInput from '../swipe-input/swipe-input';
 import Button from '../button/button';
 
 
-const StartScreen = ({onChangeInBreath, onChangeOutBreath, onChangeSessionLength, onStart, 
-                        inBreathValues, outBreathValues, sessionLengthValues }) => {
+const StartScreen = ({onChangeInBreath, onChangePostInhaleHold, onChangeOutBreath, onChangePostExhaleHold, onChangeSessionLength, onStart, 
+                        inBreathValues, postInhaleHoldValues, outBreathValues, postExhaleHoldValues, sessionLengthValues }) => {
     return (
         <div className={styles.wrapper}>
-                {/* <div className={styles.icon}>
-                    <UseAnimations size={80} strokeColor={'#1F2128'} animation={activity} />
-                </div> */}
-                <h1 className={[styles.headline, 'hero-heading'].join(" ")}>Heart Rate Variability</h1>
+            <h1 className={[styles.headline, 'hero-heading'].join(" ")}>Breathe</h1>
             <SwipeInput 
+                id={'inBreath'}
                 title={'seconds'}
                 headline={'breath in'} 
                 onChangeValue={onChangeInBreath}
                 inputValues={inBreathValues}/>
             <SwipeInput 
+                id={'postInhaleHold'}
+                title={'seconds'}
+                headline={'post inhale hold'} 
+                onChangeValue={onChangePostInhaleHold}
+                inputValues={postInhaleHoldValues}/>
+            <SwipeInput 
+                id={'outBreath'}
                 title={'seconds'} 
                 headline={'breath out'}
                 onChangeValue={onChangeOutBreath}
                 inputValues={outBreathValues}/>
             <SwipeInput 
+                id={'postExhaleHold'}
+                title={'seconds'} 
+                headline={'post exhale hold'}
+                onChangeValue={onChangePostExhaleHold}
+                inputValues={postExhaleHoldValues}/>
+            <SwipeInput 
+                id={'sessionLength'}
                 title={'minutes'} 
                 headline={'session length'}
                 onChangeValue={onChangeSessionLength}
