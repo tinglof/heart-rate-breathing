@@ -8,6 +8,8 @@ import bellOneSoundWebm from 'sounds/bell_one.webm';
 import bellTwoSoundWebm from 'sounds/bell_two.webm';
 import bellOneSoundMp3 from 'sounds/bell_one.mp3';
 import bellTwoSoundMp3 from 'sounds/bell_two.mp3';
+import kyotoBellMp3 from 'sounds/kyoto-bell-2.mp3';
+import kyotoBellWebm from 'sounds/kyoto-bell-2.webm';
 import doneMp3 from 'sounds/done.mp3';
 import doneWebm from 'sounds/done.webm';
 
@@ -17,6 +19,8 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
 
     const inBreathInMs = inBreath * 1000;
     const outBreathInMs  = outBreath * 1000;
+    const postInhaleHoldInMs = postInhaleHold ? postInhaleHold * 1000 : 0;
+    const postExhaleHoldInMs = postExhaleHold ? postExhaleHold * 1000 : 0;
 
     const buildAnimationCycle = () => {
         const animationCycle = [];
@@ -32,6 +36,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                 },
                 timer: null,
                 soundOnStart: soundTwo,
+                maxSoundDurationInMs: inBreath * 1000,
                 text: 'inhale',
             }
         )
@@ -44,8 +49,9 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                         animate: {background: '#b7bff5'},
                         transition: {duration: 0.35, ease: 'easeIn'}
                     },
-                    soundOnStart: soundOne,
+                    soundOnStart: postInhaleHoldSound,
                     text: 'hold',
+                    maxSoundDurationInMs: postInhaleHoldInMs,
                     timer: postInhaleHold
                 }
             )
@@ -62,6 +68,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                     transition: {duration: 1, ease: 'easeIn'}
                 },
                 soundOnStart: soundOne,
+                maxSoundDurationInMs: outBreath * 1000,
                 text: 'exhale',
             }
         );
@@ -74,7 +81,8 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                         animate: {background: '#b7bff5'},
                         transition: {duration: 0.35, ease: 'easeIn'}
                     },
-                    soundOnStart: soundOne,
+                    soundOnStart: postExhaleHoldSound,
+                    maxSoundDurationInMs: postExhaleHoldInMs,
                     text: 'hold',
                     timer: postExhaleHold
                 }
@@ -103,12 +111,26 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
         }
     });
 
+    const postInhaleHoldSound = new Howl({
+        src: [kyotoBellMp3, kyotoBellWebm],
+        sprite: {
+          adjustedSound: [0, postInhaleHoldInMs]
+        }
+    })
+
+    const postExhaleHoldSound = new Howl({
+        src: [kyotoBellMp3, kyotoBellWebm],
+        sprite: {
+          adjustedSound: [0, postExhaleHoldInMs]
+        }
+    })
+
     const [animationState, updateCycle] = useCycle(...buildAnimationCycle());
 
     React.useEffect( () => {
-        if(running) {
-            const id = animationState.soundOnStart.play('adjustedSound');
-            animationState.soundOnStart.fade(1, 0, inBreathInMs, id);
+        if(running && animationState.soundOnStart) {
+            const soundId = animationState.soundOnStart.play('adjustedSound');
+            animationState.soundOnStart.fade(1, 0, animationState.maxSoundDurationInMs, soundId);
         } else {
             doneSound.play();
         }
