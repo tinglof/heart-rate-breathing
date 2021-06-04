@@ -4,14 +4,14 @@ import { motion, useCycle, AnimatePresence } from 'framer-motion';
 import CountdownTimer from '../countdown-timer/countdown-timer';
 import Button from '../button/button';
 import {Howl, Howler} from 'howler';
-import bellOneSoundWebm from 'sounds/bell_one.webm';
-import bellTwoSoundWebm from 'sounds/bell_two.webm';
-import bellOneSoundMp3 from 'sounds/bell_one.mp3';
-import bellTwoSoundMp3 from 'sounds/bell_two.mp3';
-import kyotoBellMp3 from 'sounds/kyoto-bell-2.mp3';
-import kyotoBellWebm from 'sounds/kyoto-bell-2.webm';
-import doneMp3 from 'sounds/done.mp3';
-import doneWebm from 'sounds/done.webm';
+import inhaleSoundWebm from 'sounds/inhale.webm';
+import inhaleSoundMp3 from 'sounds/inhale.mp3'
+import holdSoundWebm from 'sounds/hold.webm';
+import holdSoundMp3 from 'sounds/hold.mp3';
+import exhaleSoundWebm from 'sounds/exhale.webm';
+import exhaleSoundMp3 from 'sounds/exhale.mp3';
+import finishWebm from 'sounds/finish.webm';
+import finishMp3 from 'sounds/finish.mp3';
 
 
 const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, sessionLength, back}) => {
@@ -35,7 +35,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                     transition: {duration: 1, ease: 'easeIn'}
                 },
                 timer: null,
-                soundOnStart: soundTwo,
+                soundOnStart: inhaleSound,
                 maxSoundDurationInMs: inBreath * 1000,
                 text: 'inhale',
             }
@@ -49,7 +49,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                         animate: {background: '#b7bff5'},
                         transition: {duration: 0.35, ease: 'easeIn'}
                     },
-                    soundOnStart: postInhaleHoldSound,
+                    soundOnStart: holdSoundInhale,
                     text: 'hold',
                     maxSoundDurationInMs: postInhaleHoldInMs,
                     timer: postInhaleHold
@@ -67,7 +67,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                     animate: {background: '#6878EA'},
                     transition: {duration: 1, ease: 'easeIn'}
                 },
-                soundOnStart: soundOne,
+                soundOnStart: exhaleSound,
                 maxSoundDurationInMs: outBreath * 1000,
                 text: 'exhale',
             }
@@ -81,7 +81,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                         animate: {background: '#b7bff5'},
                         transition: {duration: 0.35, ease: 'easeIn'}
                     },
-                    soundOnStart: postExhaleHoldSound,
+                    soundOnStart: holdSoundExhale,
                     maxSoundDurationInMs: postExhaleHoldInMs,
                     text: 'hold',
                     timer: postExhaleHold
@@ -92,34 +92,34 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
         return animationCycle;
     }
 
-    const doneSound = new Howl({
-        src: [doneWebm, doneMp3],
+    const finishSound = new Howl({
+        src: [finishMp3, finishWebm],
         volume: 0.5
     })
 
-    const soundOne = new Howl({
-        src: [bellOneSoundWebm, bellOneSoundMp3],
+    const inhaleSound = new Howl({
+        src: [inhaleSoundMp3, inhaleSoundWebm],
         sprite: {
           adjustedSound: [0, inBreathInMs]
         }
     });
 
-    const soundTwo = new Howl({
-        src: [bellTwoSoundWebm, bellTwoSoundMp3],
+    const exhaleSound = new Howl({
+        src: [exhaleSoundMp3, exhaleSoundWebm],
         sprite: {
           adjustedSound: [0, outBreathInMs]
         }
     });
 
-    const postInhaleHoldSound = new Howl({
-        src: [kyotoBellMp3, kyotoBellWebm],
+    const holdSoundInhale = new Howl({
+        src: [holdSoundMp3, holdSoundMp3],
         sprite: {
           adjustedSound: [0, postInhaleHoldInMs]
         }
     })
 
-    const postExhaleHoldSound = new Howl({
-        src: [kyotoBellMp3, kyotoBellWebm],
+    const holdSoundExhale = new Howl({
+        src: [holdSoundMp3, holdSoundWebm],
         sprite: {
           adjustedSound: [0, postExhaleHoldInMs]
         }
@@ -132,9 +132,9 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
             const soundId = animationState.soundOnStart.play('adjustedSound');
             animationState.soundOnStart.fade(1, 0, animationState.maxSoundDurationInMs, soundId);
         } else {
-            doneSound.play();
+            finishSound.play();
         }
-    }, [animationState, doneSound, inBreathInMs, running])
+    }, [animationState, finishSound, running])
 
     return (
         <div className={styles.wrapper}>

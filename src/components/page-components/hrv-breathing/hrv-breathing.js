@@ -4,14 +4,6 @@ import StartScreen from './components/start-screen/start-screen';
 import ActivityScreen from './components/activity-screen/activity-screen';
 import NoSleep from 'external-packages/NoSleep.js';
 
-const IN_BREATH_VALUES = Array.from({ length: 40 }, (_, i) => i + 1);
-const POST_INHALE_HOLD_VALUES = Array.from({ length: 40 }, (_, i) => i + 1);
-POST_INHALE_HOLD_VALUES.unshift('off');
-const OUT_BREATH_VALUES = Array.from({ length: 40 }, (_, i) => i + 1)
-const POST_EXHALE_HOLD_VALUES = Array.from({ length: 40 }, (_, i) => i + 1);
-POST_EXHALE_HOLD_VALUES.unshift('off');
-const SESSION_LENGTH_VALUES = ['off', 3, 5, 10, 15, 20, 25, 30, 35, 40, 45];
-
 export default class HrvBreathing extends Component {
 
     constructor(props) {
@@ -19,11 +11,11 @@ export default class HrvBreathing extends Component {
 
         this.state = {
             step: 1,
-            inBreath: IN_BREATH_VALUES[0],
-            postInhaleHold: POST_INHALE_HOLD_VALUES[0],
-            outBreath: OUT_BREATH_VALUES[0],
-            postExhaleHold: POST_EXHALE_HOLD_VALUES[0],
-            sessionLength: SESSION_LENGTH_VALUES[0],
+            inBreath: 5.5,
+            postInhaleHold: 0,
+            outBreath: 5.5,
+            postExhaleHold: 0,
+            sessionLength: 10,
         }
 
         this.nosleep = null;
@@ -51,81 +43,90 @@ export default class HrvBreathing extends Component {
         }
     }
 
+    componentDidMount() {
+        if(localStorage) {
+            const inBreath = localStorage.getItem('ib');
+            const inBreathHold = localStorage.getItem('ibh');
+            const outBreath = localStorage.getItem('ob');
+            const outBreathHold = localStorage.getItem('obh');
+            const length = localStorage.getItem('length');
+
+            this.setState({
+                inBreath: inBreath ?  inBreath : this.state.inBreath,
+                postInhaleHold: inBreathHold ? inBreathHold : this.state.postInhaleHold,
+                outBreath: outBreath ? outBreath : this.state.outBreath,
+                postExhaleHold: outBreathHold ? outBreathHold : this.state.postExhaleHold,
+                sessionLength: length ? length : this.state.sessionLength
+            })
+        }
+    }
+
+    setLocalStorageValue(key, value) {
+        if(localStorage) {
+            localStorage.setItem(key, value);
+        }
+    }
+
     onChangeInBreath(value) {
-        if(!value) {
-            return;
-        }
-        
-        if(value !== this.state.inBreath) {
-             this.setState({inBreath: value});
-        }
+        const valueAsFloat = parseFloat(value);
+        const newValue = isNaN(valueAsFloat) ? "" : valueAsFloat;
+        this.setLocalStorageValue('ib', newValue);
+        this.setState({inBreath: newValue });
         
     }
 
     onChangePostInhaleHold(value) {
-        if(!value) {
-            return;
-        }
-        
-        if(value !== this.state.inBreath) {
-             this.setState({postInhaleHold: value});
-        }
+        const valueAsFloat = parseFloat(value);
+        const newValue = isNaN(valueAsFloat) ? "" : valueAsFloat;
+        this.setLocalStorageValue('ibh', newValue);
+        this.setState({postInhaleHold: newValue});
     }
 
     onChangeOutBreath(value) {
-        if(!value) {
-            return;
-        }
-
-        if(value !== this.state.outBreath) {
-            this.setState({outBreath: value});
-        }
+        const valueAsFloat = parseFloat(value);
+        const newValue = isNaN(valueAsFloat) ? "" : valueAsFloat;
+        this.setLocalStorageValue('ob', newValue);
+        this.setState({outBreath: newValue});
     }
 
     onChangePostExhaleHold(value) {
-        if(!value) {
-            return;
-        }
-        
-        if(value !== this.state.inBreath) {
-             this.setState({postExhaleHold: value});
-        }
+        const valueAsFloat = parseFloat(value);
+        const newValue = isNaN(valueAsFloat) ? "" : valueAsFloat;
+        this.setLocalStorageValue('obh', newValue);
+        this.setState({postExhaleHold: newValue});
     }
 
     onChangeSessionLength(value) {
-        if(!value) {
-            return;
-        }
-
-        if(value !== this.state.sessionLength) {
-            this.setState({sessionLength: value});
-        }
+        const valueAsFloat = parseFloat(value);
+        const newValue = isNaN(valueAsFloat) ? "" : valueAsFloat;
+        this.setLocalStorageValue('length', newValue);
+        this.setState({sessionLength: newValue});
     }
 
     renderStep() {
         switch(this.state.step) {
             case 1:
                 return <StartScreen 
-                        inBreathValues={IN_BREATH_VALUES}
-                        postInhaleHoldValues={POST_INHALE_HOLD_VALUES}
-                        outBreathValues={OUT_BREATH_VALUES}
-                        postExhaleHoldValues={POST_EXHALE_HOLD_VALUES}
-                        sessionLengthValues={SESSION_LENGTH_VALUES}
-                        onStart={() => {this.setState({step: 2}); this.enableNoSleep();}}
-                        onChangeSessionLength={this.onChangeSessionLength}
-                        onChangeInBreath={this.onChangeInBreath} 
-                        onChangePostInhaleHold={this.onChangePostInhaleHold}
-                        onChangeOutBreath={this.onChangeOutBreath}
-                        onChangePostExhaleHold={this.onChangePostExhaleHold}
+                            inBreath={this.state.inBreath}
+                            postInhaleHold={this.state.postInhaleHold}
+                            outBreath={this.state.outBreath}
+                            postExhaleHold={this.state.postExhaleHold} 
+                            sessionLength={this.state.sessionLength} 
+                            onStart={() => {this.setState({step: 2}); this.enableNoSleep();}}
+                            onChangeSessionLength={this.onChangeSessionLength}
+                            onChangeInBreath={this.onChangeInBreath} 
+                            onChangePostInhaleHold={this.onChangePostInhaleHold}
+                            onChangeOutBreath={this.onChangeOutBreath}
+                            onChangePostExhaleHold={this.onChangePostExhaleHold}
                         />
                         
             case 2:
                 return <ActivityScreen 
                         back={() => {this.setState({step: 1}); this.disableNoSleep(); }}
                         inBreath={this.state.inBreath}
-                        postInhaleHold={this.state.postInhaleHold === 'off' ? null : this.state.postInhaleHold}
+                        postInhaleHold={this.state.postInhaleHold === 0 ? null : this.state.postInhaleHold}
                         outBreath={this.state.outBreath}
-                        postExhaleHold={this.state.postExhaleHold === 'off' ? null : this.state.postExhaleHold}
+                        postExhaleHold={this.state.postExhaleHold === 0 ? null : this.state.postExhaleHold}
                         sessionLength={this.state.sessionLength}/>
             default: 
                 return null;

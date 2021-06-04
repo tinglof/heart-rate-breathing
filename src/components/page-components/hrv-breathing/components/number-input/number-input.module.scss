@@ -1,0 +1,63 @@
+@import 'styles/standard-theme.scss';
+@import 'styles/break-points.scss';
+
+.wrapper {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 10%;
+}
+
+.text-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    margin: 0;
+    color: map-get($standard, 'title');
+    margin: 2rem 0 0.25rem;
+}
+
+.headline {
+    margin: 0;
+    color: map-get($standard, 'text');
+    margin-bottom: 1.25rem;
+}
+
+.input-field {
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type=number] {
+        -moz-appearance:textfield; /* Firefox */
+    }
+
+    :global(.MuiInput-input) {
+        font-size: 3rem;
+        color: map-get($standard, 'element_bkg');
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        caret-color: map-get($standard, 'element_bkg');
+        letter-spacing: 2px;
+    }
+
+    &:global(.MuiTextField-root) {
+        max-width: 10rem;
+    }
+
+    :global(.MuiInput-underline) {
+        &:before {
+            border-bottom: none;
+        }
+    } 
+}

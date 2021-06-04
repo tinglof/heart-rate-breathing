@@ -1,44 +1,58 @@
 import React from 'react';
 import styles from './start-screen.module.scss';
-import SwipeInput from '../swipe-input/swipe-input';
+import NumberInput from '../number-input/number-input';
 import Button from '../button/button';
 
 
-const StartScreen = ({onChangeInBreath, onChangePostInhaleHold, onChangeOutBreath, onChangePostExhaleHold, onChangeSessionLength, onStart, 
-                        inBreathValues, postInhaleHoldValues, outBreathValues, postExhaleHoldValues, sessionLengthValues }) => {
-    return (
+const StartScreen = (
+    { 
+        onChangeInBreath, onChangePostInhaleHold, onChangeOutBreath, onChangePostExhaleHold, onChangeSessionLength, onStart,
+        inBreath, postInhaleHold, outBreath, postExhaleHold, sessionLength 
+    }) => {
+    
+        return (
         <div className={styles.wrapper}>
             <h1 className={[styles.headline, 'hero-heading'].join(" ")}>Breathe</h1>
-            <SwipeInput 
+            <NumberInput 
+                value={inBreath}
                 id={'inBreath'}
                 title={'seconds'}
-                headline={'breath in'} 
-                onChangeValue={onChangeInBreath}
-                inputValues={inBreathValues}/>
-            <SwipeInput 
+                headline={'breath in'}
+                min={1}
+                onChange={onChangeInBreath}
+            />
+            <NumberInput 
+                value={postInhaleHold}
                 id={'postInhaleHold'}
                 title={'seconds'}
-                headline={'post inhale hold'} 
-                onChangeValue={onChangePostInhaleHold}
-                inputValues={postInhaleHoldValues}/>
-            <SwipeInput 
+                headline={'post inhale hold'}
+                min={0}
+                onChange={onChangePostInhaleHold}
+            />
+            <NumberInput 
+                value={outBreath}
                 id={'outBreath'}
                 title={'seconds'} 
                 headline={'breath out'}
-                onChangeValue={onChangeOutBreath}
-                inputValues={outBreathValues}/>
-            <SwipeInput 
+                min={1}
+                onChange={onChangeOutBreath}
+            />
+            <NumberInput 
+                value={postExhaleHold}
                 id={'postExhaleHold'}
                 title={'seconds'} 
                 headline={'post exhale hold'}
-                onChangeValue={onChangePostExhaleHold}
-                inputValues={postExhaleHoldValues}/>
-            <SwipeInput 
+                min={0}
+                onChange={onChangePostExhaleHold}
+            />
+            <NumberInput 
+                value={sessionLength}
                 id={'sessionLength'}
                 title={'minutes'} 
                 headline={'session length'}
-                onChangeValue={onChangeSessionLength}
-                inputValues={sessionLengthValues}/>
+                min={0}
+                onChange={onChangeSessionLength}
+            />
             <div className={styles['button-wrapper']}>
                 <Button onClick={onStart}>
                     lets go
