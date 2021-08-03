@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styles from './activity-screen.module.scss';
 import { motion, useCycle, AnimatePresence } from 'framer-motion';
 import CountdownTimer from '../countdown-timer/countdown-timer';
+import SecondsTimer from '../seconds-timer/seconds-timer';
 import Button from '../button/button';
 import {Howl, Howler} from 'howler';
 import inhaleSoundWebm from 'sounds/inhale.webm';
@@ -34,7 +35,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                     animate: {background: '#6878EA'},
                     transition: {duration: 1, ease: 'easeIn'}
                 },
-                timer: null,
+                timer: Number.isInteger(inBreath) ? inBreath : null,
                 soundOnStart: inhaleSound,
                 maxSoundDurationInMs: inBreath * 1000,
                 text: 'inhale',
@@ -67,6 +68,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                     animate: {background: '#6878EA'},
                     transition: {duration: 1, ease: 'easeIn'}
                 },
+                timer: Number.isInteger(outBreath) ? outBreath : null,
                 soundOnStart: exhaleSound,
                 maxSoundDurationInMs: outBreath * 1000,
                 text: 'exhale',
@@ -155,7 +157,13 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                             {
                                 animationState.timer &&
                                 <div className={styles['timer-wrapper']}>
-                                    <CountdownTimer format={'ss'} onCountDownEnd={() => updateCycle()} intialTimeInSeconds={animationState.timer} />
+                                    <SecondsTimer 
+                                        onCountDownEnd={() => {
+                                            if(running) {
+                                                updateCycle();
+                                            }
+                                        }} 
+                                        intialTimeInSeconds={animationState.timer} />
                                 </div>
                             }  
                         </motion.div>
@@ -164,7 +172,8 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                 <motion.div 
                     {...animationState.animation}
                     onAnimationComplete={() => {
-                        if(running) {
+                        console.log(running);
+                        if(running && !animationState.timer) {
                             updateCycle();
                         }
                     }}
@@ -174,7 +183,7 @@ const ActivityScreen = ({inBreath, postInhaleHold, outBreath, postExhaleHold, se
                 </motion.div>
             </div>
             {   
-                sessionLength && typeof sessionLength === "number" &&
+                typeof sessionLength === "number" && sessionLength > 0 && 
                 <div className={styles.countdown}>
                     <CountdownTimer onCountDownEnd={() => setRunning(false)} intialTimeInSeconds={sessionLength * 60} />
                 </div>

@@ -1,4 +1,4 @@
-import React, { Component} from 'react';
+import React, { Component } from 'react';
 import styles from './hrv-breathing.module.scss';
 import StartScreen from './components/start-screen/start-screen';
 import ActivityScreen from './components/activity-screen/activity-screen';
@@ -52,11 +52,11 @@ export default class HrvBreathing extends Component {
             const length = localStorage.getItem('length');
 
             this.setState({
-                inBreath: inBreath ?  inBreath : this.state.inBreath,
-                postInhaleHold: inBreathHold ? inBreathHold : this.state.postInhaleHold,
-                outBreath: outBreath ? outBreath : this.state.outBreath,
-                postExhaleHold: outBreathHold ? outBreathHold : this.state.postExhaleHold,
-                sessionLength: length ? length : this.state.sessionLength
+                inBreath: inBreath ? Number(inBreath) : this.state.inBreath,
+                postInhaleHold: inBreathHold ? Number(inBreathHold) : this.state.postInhaleHold,
+                outBreath: outBreath ? Number(outBreath) : this.state.outBreath,
+                postExhaleHold: outBreathHold ? Number(outBreathHold) : this.state.postExhaleHold,
+                sessionLength: length ? Number(length) : this.state.sessionLength
             })
         }
     }

@@ -5,7 +5,6 @@ import TextField from '@material-ui/core/TextField';
 const NumberInput = ({ id, value, title, headline, onChange, min }) => {
 
     const onChangeLocal = (event) => {
-        console.log(event.target.value);
         if(onChange && typeof onChange === 'function') {
             const value = event.target.value;
             const cleanedValue = value.replace(/[^\d.-]/g, '');
